@@ -3,18 +3,24 @@
  */
 
 
-//////// Load local file via user file input //////////////////////////
+////////Calculations ////////////////////////////////////////////////
+
+function degToRad(degrees) {
+	return degrees * Math.PI / 180;
+}
+
+////////Load local file via user file input //////////////////////////
 
 
-//	// Load source code for both, vertex an fragment shader.
-//	loadFiles(['vertex.shader', 'fragment.shader'], function (shaderSourceCode) {
-//		// Init vertex shader.
-//		var vertexShader = initShader(gl.VERTEX_SHADER, shaderSourceCode[0]);
-//		// Init fragment shader.
-//		var fragmentShader = initShader(gl.FRAGMENT_SHADER, shaderSourceCode[1]);
-//	}, function (url) { // Error callback.
-//		alert('Failed to download "' + url + '"');
-//	}, false); // Laod local files. 
+//// Load source code for both, vertex an fragment shader.
+//loadFiles(['vertex.shader', 'fragment.shader'], function (shaderSourceCode) {
+//// Init vertex shader.
+//var vertexShader = initShader(gl.VERTEX_SHADER, shaderSourceCode[0]);
+//// Init fragment shader.
+//var fragmentShader = initShader(gl.FRAGMENT_SHADER, shaderSourceCode[1]);
+//}, function (url) { // Error callback.
+//alert('Failed to download "' + url + '"');
+//}, false); // Laod local files. 
 
 function loadFileViaFileReader(url, fileIndex, callback, errorCallback) {
 	// For this to work the following elements have to be in the HTML document:
