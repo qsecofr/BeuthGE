@@ -12,7 +12,11 @@ function webGLStart() {
 	// initialize canvas and gl.
 	main.init();
 	// start main render, animation and event loop.
-	main.tick();
+	// start main render, animation and event loop.
+	setInterval(function(){
+		main.tick();
+	}, 1000);
+	
 }
 
 function Main() {
@@ -71,11 +75,13 @@ function Main() {
 
 //	Render and event loop.
 	this.tick = function() {
-		document.write("this.canvas:"+ this.canvas);
+		//document.write("this.canvas:"+ this.canvas);
 		// Start timer.
 		//window.requestAnimationFrame;
-		requestAnimFrame(this.tick);
+		//requestAnimFrame(this.tick);
 		//eventHandler.handleEvents();
+		
+	    this.canvas.scene.animate();
 		this.canvas.scene.draw();
 	};	
 }

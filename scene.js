@@ -10,8 +10,10 @@ function Scene(canvas, gl, matrices, shader, buffer) {
 	this.shader = shader;
 	this.buffer = buffer;
 	// Variables for animation.
-	var rotTri = 0;
-	var rotSquare = 0;
+	this.lastTime=0;
+	this.rotTri = 0;
+	this.rotSquare = 0;
+	
 
 	// Initialize the scene.
 	// Set things that do not change from frame to frame.
@@ -46,21 +48,24 @@ function Scene(canvas, gl, matrices, shader, buffer) {
 		// Pipe the vertex positions as attribute into the vertex shader.
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer.triangleVertexPositionBuffer);		
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, buffer.triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-		gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
-		gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, triangleVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer.triangleVertexColorBuffer);
+		gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, buffer.triangleVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		this.setMatrixUniforms();
 		gl.drawArrays(gl.TRIANGLES, 0, buffer.triangleVertexPositionBuffer.numItems);
 
-		matrices.mvPopMatrix();
+		//wenn pop und push drin sind, wird square nicht verschoben
+		
+		//matrices.mvPopMatrix();
 
 		mat4.translate(mvMatrix, [3, 0, 0]); // Translate.
-		matrices.mvPushMatrix();
+		//matrices.mvPushMatrix();
 		mat4.rotate(mvMatrix, degToRad(this.rotSquare), [1, 0, 0]);
 
+		
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer.squareVertexPositionBuffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, buffer.squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-		gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
-		gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer.squareVertexColorBuffer);
+	    gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, buffer.squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		this.setMatrixUniforms();
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.squareVertexPositionBuffer.numItems);
 
@@ -69,13 +74,12 @@ function Scene(canvas, gl, matrices, shader, buffer) {
 
 	this.animate = function() {
 		var timeNow = new Date().getTime();
-		if (lastTime != 0) {
-			var elapsed = timeNow - lastTime;
-
-			rotTri += (90 * elapsed) / 1000.0;
-			rotSquare += (75 * elapsed) / 1000.0;
+		if (this.lastTime != 0) {
+			var elapsed = timeNow - this.lastTime;
+			this.rotTri = this.rotTri + (10 * elapsed) / 1000.0;
+			this.rotSquare = this.rotSquare + (75 * elapsed) / 1000.0;
 		}
-		lastTime = timeNow;
+		this.lastTime = timeNow;
 	};
 
 	this.setMatrixUniforms = function() {

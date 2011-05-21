@@ -18,26 +18,26 @@ function Buffer(gl) {
 	this.squareVertexColorBuffer;
 
 	this.init02 = function(){
-		triangleVertexColorBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
+		this.triangleVertexColorBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.triangleVertexColorBuffer);
 		var colors = [
 		              1.0, 0.0, 0.0, 1.0,
 		              0.0, 1.0, 0.0, 1.0,
 		              0.0, 0.0, 1.0, 1.0
 		              ];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-		triangleVertexColorBuffer.itemSize = 4;
-		triangleVertexColorBuffer.numItems = 3;
+		this.triangleVertexColorBuffer.itemSize = 4;
+		this.triangleVertexColorBuffer.numItems = 3;
 
-		squareVertexColorBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
+		this.squareVertexColorBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.squareVertexColorBuffer);
 		colors = [];
 		for (var i=0; i < 4; i++) {
 			colors = colors.concat([0.5, 0.5, 1.0, 1.0]);
 		}
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-		squareVertexColorBuffer.itemSize = 4;
-		squareVertexColorBuffer.numItems = 4;		
+		this.squareVertexColorBuffer.itemSize = 4;
+		this.squareVertexColorBuffer.numItems = 4;		
 	};
 
 	// For lesson 01.
