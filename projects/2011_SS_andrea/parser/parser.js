@@ -1,6 +1,8 @@
-function parse(data){
+function parse(data,target){
 	var parser=new ColladaParser();
-	parser.parseCollada(data);
+	json=parser.parseCollada(data);
+	target.innerHTML=json;
+	alert(JSON.parse(json).cube.v);
 }
 
 
@@ -18,7 +20,12 @@ var ColladaParser=function(){
 		var allOffsets=new Array();
 		//step 1 read VERTEX ******************************************************************************
 		
+		
+		
 		var node = geometryNode.item(0).selectNodeSet("//polylist/input[@semantic=VERTEX]");
+		if(node.item(0)==null){
+			node=geometryNode.item(0).selectNodeSet("//triangles/input[@semantic=VERTEX]");
+		}
 		//read vertexOffset
 		var vertexOffset=node.item(0).getAttributes().getNamedItem("offset").getNodeValue();
 		allOffsets.push(vertexOffset);
@@ -38,7 +45,11 @@ var ColladaParser=function(){
 		
 		//read normalid
 		node = geometryNode.item(0).selectNodeSet("//polylist/input[@semantic=NORMAL]");
+		if(node.item(0)==null){
+			node=geometryNode.item(0).selectNodeSet("//triangles/input[@semantic=NORMAL]");
+		}
 		//read normalOffset
+		alert(node.item(0).getAttributes());
 		var normalOffset=node.item(0).getAttributes().getNamedItem("offset").getNodeValue();
 		allOffsets.push(normalOffset);
 		var normalId=node.item(0).getAttributes().getNamedItem("source").getNodeValue();
@@ -48,9 +59,10 @@ var ColladaParser=function(){
 		
 		//step 3 read sources *******************************************************************************
 		
-		var sources=docRoot.selectNodeSet("//source");
+		var sources=geometryNode.item(0).selectNodeSet("//source");
 		for(i=0;i<sources.length;i++){
-          node=sources.item(i);    
+          node=sources.item(i);
+		  
 		  nodeId=node.getAttributes().getNamedItem("id").getNodeValue();	
 		  //read accessor
 			tempNode=node.selectNodeSet("//technique_common/accessor");
@@ -85,6 +97,9 @@ var ColladaParser=function(){
 		
 		//read polylist node p
 		node= geometryNode.item(0).selectNodeSet("//polylist/p");
+		if(node.item(0)==null){
+			node= geometryNode.item(0).selectNodeSet("//triangles/p");
+		}
 		var indicies=node.item(0).getFirstChild().getNodeValue();
 		//replace whitespaces with 
 		indicies=indicies.split(' ');
@@ -121,18 +136,18 @@ var ColladaParser=function(){
 		for(var i=0;i<vertexSortedArray.length;i++){
 			indiciesForWeb.push(i);
 		}
-		
+		alert(indiciesForWeb);
 		var JSObject={
 			"cube":{
 				"v":vertices,
-				"n":normals,
+				"t":normals,
 				"i":indiciesForWeb,
 			}
 		};
 		
 		// Das Objekt zu JSON kodieren
 		var jsonCode = JSON.stringify(JSObject);
-		document.write(jsonCode);
+		return jsonCode;
 		
 	}
 	
