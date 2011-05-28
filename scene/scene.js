@@ -58,7 +58,7 @@ function Scene(gl, sceneGraph, canvas, verticalFieldOfView, framerate)
 		// get Aspect ratio
 		var aspectratio = this.canvas.width / this.canvas.height; // 4/3
 		mat4.perspective(this.verticalFieldOfView, aspectratio, 1, 100, this.matrices.pMatrix);
-
+		
 		var gl = this.gl; 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);

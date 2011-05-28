@@ -10,7 +10,7 @@ function Model(filename){
   this.vertexTextureCoordBuffer;
   this.vertexIndexBuffer;
   this.texture;
-  this.loaded=false;
+  
   
     
   
@@ -25,12 +25,13 @@ function Model(filename){
    }
    
    
-    Model.prototype.draw = function(gl){
+    Model.prototype.draw = function(gl,pMatrix, mvMatrix){
 	    
 			//is json loaded
 			if(this.data==null)return;
+			var data=this.data; 	  
 			
-			var data=this.data; 	    
+			
 			this.vertexTextureCoordBuffer = gl.createBuffer();
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureCoordBuffer);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.cube.t), gl.STATIC_DRAW);
@@ -56,7 +57,10 @@ function Model(filename){
 			gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.vertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		  
 			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
-			gl.drawElements(gl.TRIANGLES,this.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+			gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+            gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+			//mat4.identity(mvMatrix);
+			gl.drawElements(gl.TRIANGLES,this.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);			
 		}
    
    
@@ -65,11 +69,12 @@ function Model(filename){
 		$.getJSON(filename, function(data) {
 		$('.result').html(data);
 		that.data=data;
+	
 	 });
 	}
+	
 	
 	
 	this.load(filename,this);
 	
 } 
-Model.prototype=new Node;
